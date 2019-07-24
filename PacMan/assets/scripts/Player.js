@@ -9,12 +9,13 @@ cc.Class({
     },
 
     onLoad: function () {
-        
+        cc.director.getCollisionManager().enabled = true;
+        cc.director.getCollisionManager().enabledDebugDraw = true;
         // // 移动开关
-         this.accLeft = false;
-         this.accRight = false;
-         this.accUp = false;
-         this.accDown = false;
+        this.accLeft = false;
+        this.accRight = false;
+        this.accUp = false;
+        this.accDown = false;
         // 主角速度
         this.xSpeed = 0;
         this.ySpeed = 0;
@@ -73,21 +74,45 @@ cc.Class({
     update: function (dt) {
         // 根据当前加速度方向每帧更新速度
         if (this.accLeft) {
-            this.ySpeed=0;
-            this.xSpeed =- this.accel;
+            this.ySpeed = 0;
+            this.xSpeed = - this.accel;
         } else if (this.accRight) {
-            this.ySpeed=0;
-            this.xSpeed =+ this.accel;
+            this.ySpeed = 0;
+            this.xSpeed = + this.accel;
         } else if (this.accUp) {
-            this.xSpeed=0;
-            this.ySpeed =+ this.accel;
+            this.xSpeed = 0;
+            this.ySpeed = + this.accel;
         } else if (this.accDown) {
-            this.xSpeed=0;
-            this.ySpeed =- this.accel;
+            this.xSpeed = 0;
+            this.ySpeed = - this.accel;
         }
 
         // 根据当前速度更新主角的位置
         this.node.x += this.xSpeed;
         this.node.y += this.ySpeed;
     },
+    onCollisionEnter: function (other, self) {
+        if (this.xSpeed < 0) {
+            this.xSpeed = 0;
+            this.node.x += 4;
+        } else if (this.xSpeed > 0) {
+            this.xSpeed = 0;
+            this.node.x -= 4;
+        } else if (this.ySpeed < 0) {
+            this.ySpeed = 0;
+            this.node.y += 4;
+        } else if (this.ySpeed > 0) {
+            this.ySpeed = 0;
+            this.node.y -= 4;
+        }
+
+    },
+    // onCollisionStay: function (other, self) {
+    //     this.xSpeed=0;
+    //     this.ySpeed=0;
+    // },
+    // onCollisionExit: function (other, self) {
+    //     this.xSpeed=0;
+    //     this.ySpeed=0;
+    // }
 });
