@@ -8,10 +8,18 @@
   },
   "collision-matrix": [
     [
+      true,
+      true,
       true
     ],
     [
+      true,
       false,
+      true
+    ],
+    [
+      true,
+      true,
       false
     ]
   ],
@@ -22,7 +30,8 @@
   "fit-width": false,
   "group-list": [
     "wall",
-    "ghost"
+    "ghost",
+    "pacman"
   ],
   "simulator-orientation": false,
   "simulator-resolution": {
@@ -30,6 +39,5 @@
     "width": 960
   },
   "use-customize-simulator": false,
-  "use-project-simulator-setting": false,
-  "start-scene": "current"
+  "use-project-simulator-setting": false
 }
