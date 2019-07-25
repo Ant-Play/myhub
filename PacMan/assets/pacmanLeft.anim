@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "pacmanLeft",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.2,
+  "sample": 15,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "ae23f9c9-9e5c-46d7-9257-ea449dc6c26e"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "bd8607c4-c33c-4e84-a1f8-3576ceb750ca"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "7db49e1f-f525-4e07-8d5b-a93a8de834e4"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

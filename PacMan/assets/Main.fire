@@ -1737,7 +1737,7 @@
     "node": {
       "__id__": 61
     },
-    "_enabled": false,
+    "_enabled": true,
     "tag": 0,
     "_offset": {
       "__type__": "cc.Vec2",
@@ -1746,8 +1746,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 9,
-      "height": 11
+      "width": 10,
+      "height": 13
     },
     "_id": "c7fl4xITJOZae3Qp0bsW5e"
   },

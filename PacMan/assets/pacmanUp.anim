@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "pacmanUp",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.2,
+  "sample": 15,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "d54e9a81-cf0f-4a80-bdc4-99f8db20b774"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "c881118f-b9e1-4f92-8c06-200cabe1b7d1"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "2ca21036-6c08-4fa0-bcd5-086e571160a0"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

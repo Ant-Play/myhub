@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "pacmanDown",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.2,
+  "sample": 15,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "e153bb23-314d-4065-aae3-6a96d19c180a"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "54ba11bb-427c-4118-b925-0e2ae4c36027"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "5b520505-ba88-483b-9370-32253aae9d92"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

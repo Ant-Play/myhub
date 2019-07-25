@@ -36,6 +36,7 @@ cc.Class({
         switch (event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = true;
+                
                 break;
             case cc.macro.KEY.d:
                 this.accRight = true;
@@ -47,6 +48,23 @@ cc.Class({
                 this.accDown = true;
                 break;
         }
+        var anim = this.node.getComponent(cc.Animation);
+        if(this.accLeft)
+        {
+            // animCtrl.play("linear");
+            anim.play('pacmanLeft');
+        }else if(this.accRight)
+        {
+            anim.play('pacmanRight');
+        }
+        else if(this.accDown)
+        {
+            anim.play('pacmanDown');
+        }
+        else 
+        {
+            anim.play('pacmanUp');
+        }
     },
 
     onKeyUp(event) {
@@ -54,6 +72,7 @@ cc.Class({
         switch (event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = false;
+                
                 break;
             case cc.macro.KEY.d:
                 this.accRight = false;
@@ -76,6 +95,8 @@ cc.Class({
         if (this.accLeft) {
             this.ySpeed = 0;
             this.xSpeed = - this.accel;
+            // anim.stop()
+            // anim.play('pacmanLeft');
         } else if (this.accRight) {
             this.ySpeed = 0;
             this.xSpeed = + this.accel;
