@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "InkyRight",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.25,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "de25af27-e2eb-4b57-afaf-42254a8e767c"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "1e102cd9-f8a2-4c5b-9ec5-559550a0cc20"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "clyde04",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.25,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "9b5a2cbf-efc5-428e-aeb7-e2a5cc8e53ec"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "19e7e8f8-c39c-4373-9a74-e3567e2e7541"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

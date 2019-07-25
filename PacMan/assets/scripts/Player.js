@@ -6,6 +6,7 @@ cc.Class({
     properties: {
         MoveSpeed: 0,
         accel: 1,
+        status : 0,
     },
 
     onLoad: function () {
@@ -33,6 +34,7 @@ cc.Class({
 
     onKeyDown(event) {
         // set a flag when key pressed
+        this.status += 1;
         switch (event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = true;
@@ -49,26 +51,30 @@ cc.Class({
                 break;
         }
         var anim = this.node.getComponent(cc.Animation);
-        if(this.accLeft)
-        {
-            // animCtrl.play("linear");
-            anim.play('pacmanLeft');
-        }else if(this.accRight)
-        {
-            anim.play('pacmanRight');
-        }
-        else if(this.accDown)
-        {
-            anim.play('pacmanDown');
-        }
-        else 
-        {
-            anim.play('pacmanUp');
+        if(this.status == 1){
+            if(this.accLeft)
+            {
+                
+                // animCtrl.play("linear");
+                anim.play('pacmanLeft');
+            }else if(this.accRight)
+            {
+                anim.play('pacmanRight');
+            }
+            else if(this.accDown)
+            {
+                anim.play('pacmanDown');
+            }
+            else if(this.accUp)
+            {
+                anim.play('pacmanUp');
+            }
         }
     },
 
     onKeyUp(event) {
         // unset a flag when key released
+        this.status = 0;
         switch (event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = false;
