@@ -12,38 +12,29 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-       //这个属性引用了豆豆预制资源
-       startPrefab: {
-           default: null,
-           type: cc.Prefab
-       },
-       player:{
-           default:null,
-           type: cc.Node
-       }
+        beanDotPrefab: {
+            default: null,
+            type: cc.Prefab
+        },
+        pacMan: {
+            default: null,
+            type: cc.Node
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad: function() {
-        //生成一个新的星星
-        this.spawnNewPac();
-    },
-    spawnNewPac: function(){
-        //使用给定的模板在场景中生成一个新的节点
-        var newPac = cc.instantiate(this.startPrefab);
-        //将新的节点添加到Canvas节点下面
-        this.node.addChild(newPac);
-        //为豆豆设置一个随机位置
-        newPac.setPosition(this.getNewPacPosition());
-        //在豆豆组件上暂存Game对象的引用
-        newPac.getComponent('Pac').game = this;
-    },
-    getNewPacPosition: function() {
-        var x = 0;
-        var y = 0;
-        //返回豆豆坐标
-        return cc.v2(x,y);
+    onLoad () {
+        cc.director.getPhysicsManager().enabled = true;
+        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
+        cc.PhysicsManager.DrawBits.e_pairBit |
+        cc.PhysicsManager.DrawBits.e_centerOfMassBit |
+        cc.PhysicsManager.DrawBits.e_jointBit |
+        cc.PhysicsManager.DrawBits.e_shapeBit
+        ;
+
+        this.spawnNewBeanDot();
+
     },
 
     start () {
@@ -51,4 +42,21 @@ cc.Class({
     },
 
     // update (dt) {},
+    spawnNewBeanDot: function() {
+        // 使用给定的模板在场景中生成一个新节点
+        var newBeanDot = cc.instantiate(this.beanDotPrefab);
+        // 将新增的节点添加到 Canvas 节点下面
+        this.node.addChild(newBeanDot);
+        // 为星星设置一个随机位置
+        newBeanDot.setPosition(this.getNewBeanDotPosition());
+        // 在星星组件上暂存 Game 对象的引用
+        newBeanDot.getComponent('BeanDot').game = this;
+    },
+    getNewBeanDotPosition: function () {
+        var randX = 0;
+        
+        var randY = 0;
+ 
+        return cc.v2(randX, randY);
+    },
 });
