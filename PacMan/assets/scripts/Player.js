@@ -5,42 +5,32 @@ cc.Class({
 
     properties: {
         speed: cc.v2(0, 0),
-        MoveSpeed: 4,
-        status: 0,
+        moveSpeed: 0,
+        dir: cc.v2(0, 0),
+        size:cc.v2(7, 7),
     },
 
     onLoad: function () {
-        //碰撞标记
-        this.collisionX = 0;
-        this.collisionY = 0;
         // // 移动开关
         this.accLeft = false;
         this.accRight = false;
         this.accUp = false;
         this.accDown = false;
-        //碰撞标记
-        this.collisionX = 0;
-        this.collisionY = 0;
-
-        this.prePosition = cc.v2();
-        this.preStep = cc.v2();
-
 
         // 初始化键盘输入监听
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     },
+    start() {
+        this.status = 0;
+        // this.size.x=this.node.width*0.3;
+        // this.size.y=this.node.height*0.3;
+        this.detectionDistance=16;
+ 
+    },
     onEnable: function () {
         cc.director.getCollisionManager().enabled = true;
         cc.director.getCollisionManager().enabledDebugDraw = true;
-
-        cc.director.getPhysicsManager().enabled = true;
-        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
-            cc.PhysicsManager.DrawBits.e_pairBit |
-            cc.PhysicsManager.DrawBits.e_centerOfMassBit |
-            cc.PhysicsManager.DrawBits.e_jointBit |
-            cc.PhysicsManager.DrawBits.e_shapeBit
-            ;
     },
 
     onDisable: function () {
@@ -63,25 +53,50 @@ cc.Class({
             case cc.macro.KEY.a:
             case cc.macro.KEY.left:
                 this.accLeft = true;
+                this.dir.x = -1;
+                this.dir.y = 0;
                 break;
             case cc.macro.KEY.d:
             case cc.macro.KEY.right:
                 this.accRight = true;
+                this.dir.x = 1;
+                this.dir.y = 0;
                 break;
             case cc.macro.KEY.w:
             case cc.macro.KEY.up:
                 this.accUp = true;
+                this.dir.x = 0;
+                this.dir.y = 1;
                 break;
             case cc.macro.KEY.s:
             case cc.macro.KEY.down:
                 this.accDown = true;
+                this.dir.x = 0;
+                this.dir.y = -1;
                 break;
         }
+
+        // // 根据当前速度方向每帧设置速度
+        // if (this.accLeft) {
+        //     this.speed.y = 0;
+        //     this.speed.x = - this.moveSpeed;
+        //     // anim.stop()
+        //     // anim.play('pacmanLeft');
+        // } else if (this.accRight) {
+        //     this.speed.y = 0;
+        //     this.speed.x = + this.moveSpeed;
+        // } else if (this.accUp) {
+        //     this.speed.x = 0;
+        //     this.speed.y = + this.moveSpeed;
+        // } else if (this.accDown) {
+        //     this.speed.x = 0;
+        //     this.speed.y = - this.moveSpeed;
+        // }
+
         //变换相应方向pacman的动画
         var anim = this.node.getComponent(cc.Animation);
-        if (this.status == 1) {
+        if (this.status == 1 && this.Valid()) {
             if (this.accLeft) {
-
                 // animCtrl.play("linear");
                 anim.play('pacmanLeft');
             } else if (this.accRight) {
@@ -93,6 +108,8 @@ cc.Class({
             else if (this.accUp) {
                 anim.play('pacmanUp');
             }
+            this.speed.x = this.dir.x * this.moveSpeed;
+            this.speed.y = this.dir.y * this.moveSpeed;
         }
     },
 
@@ -121,105 +138,73 @@ cc.Class({
         }
     },
 
-    start() {
-    },
+
 
     Valid() {
-        // this.PW1 = rigidbody.getWorldPoint()
-        // this.PW2 = cc.v2(0,0)
-        // this.PW2.x=PW1.x+this.speed.x;
-        // this.PW2.y=PW1.y+this.speed.y;
-        // var result = this.phyManager.rayCast(pW1, pW2, cc.RayCastType.Closest);
-        //console.log( result.collider===node.collider);
+        this.isWallTop = false;
+        this.isWallButton = false;
         this.PW1 = this.node.convertToWorldSpaceAR(cc.v2(0, 0));
-        this.PW2 = cc.v2(this.PW1.x + this.speed.x*7, this.PW1.y + this.speed.y*7);
-        this.results = cc.director.getPhysicsManager().rayCast(this.PW1, this.PW2, cc.RayCastType.Closest);
+        //console.log("PW1:"+this.PW1);
+        this.PwTemp = cc.v2(this.PW1);
+        //console.log("PwTemp:"+this.PwTemp);
+        this.PwTemp.x += this.dir.y * this.size.x ;
+        this.PwTemp.y += this.dir.x * this.size.y ;
+        //console.log("PwTemp:"+this.PwTemp);
+        this.PW2 = cc.v2(0, 0);
+        this.PW2.x = this.PwTemp.x + this.dir.x * this.moveSpeed * this.detectionDistance;
+        this.PW2.y = this.PwTemp.y + this.dir.y * this.moveSpeed * this.detectionDistance;
+       // console.log("PW2:"+this.PW2);
+        this.results = cc.director.getPhysicsManager().rayCast(this.PwTemp, this.PW2, cc.RayCastType.Closest);
         //this.rayCollider = cc.director.getPhysicsManager().testPoint(this.PW2);
-        if (this.results != null) {
-            console.log(this.results);
+        if (this.results.length >= 1) {
+            //console.log(this.results[0].collider.node.name);
+            //console.log(this.results)
+            this.results[0].collider.node.name == "Maze" ? this.isWallTop = true : this.isWallTop = false;
         }
-        //console.log(this.PW2);
-        return true;
+        this.PwTemp = cc.v2(this.PW1);
+        this.PwTemp.x -= this.dir.y * this.size.x ;
+        this.PwTemp.y -= this.dir.x * this.size.y ;
+        //console.log("B:PwTemp:"+this.PwTemp);
+        this.PW2 = cc.v2(0, 0);
+        this.PW2.x = this.PwTemp.x + this.dir.x * this.moveSpeed * this.detectionDistance;
+        this.PW2.y = this.PwTemp.y + this.dir.y * this.moveSpeed * this.detectionDistance;
+        //console.log("PW2:---"+this.PW2);
+        this.results = cc.director.getPhysicsManager().rayCast(this.PwTemp, this.PW2, cc.RayCastType.Closest);
+        if (this.results.length >= 1) {
+            this.results[0].collider.node.name == "Maze" ? this.isWallButton = true : this.isWallButton = false;
+        }
+        return (this.isWallTop == false)&&(this.isWallButton == false);
+
     },
 
     update: function (dt) {
-        // 根据当前速度方向每帧设置速度
-        if (this.accLeft) {
-            this.speed.y = 0;
-            this.speed.x = - this.MoveSpeed;
-            // anim.stop()
-            // anim.play('pacmanLeft');
-        } else if (this.accRight) {
-            this.speed.y = 0;
-            this.speed.x = + this.MoveSpeed;
-        } else if (this.accUp) {
-            this.speed.x = 0;
-            this.speed.y = + this.MoveSpeed;
-        } else if (this.accDown) {
-            this.speed.x = 0;
-            this.speed.y = - this.MoveSpeed;
-        }
-
         // 根据当前速度更新主角的位置
-        if (this.Valid()) {
-            this.node.x += this.speed.x;
-            this.node.y += this.speed.y;
-        }
+        this.node.x += this.speed.x;
+        this.node.y += this.speed.y;
 
     },
 
     onCollisionEnter: function (other, self) {
-        if (this.speed.x < 0) {
-            this.speed.x = 0;
-            this.node.x += 4;
-        } else if (this.speed.x > 0) {
-            this.speed.x = 0;
-            this.node.x -= 4;
-        } else if (this.speed.y < 0) {
-            this.speed.y = 0;
-            this.node.y += 4;
-        } else if (this.speed.y > 0) {
-            this.speed.y = 0;
-            this.node.y -= 4;
-        }
+        // if (this.speed.x < 0) {
+        //     this.speed.x = 0;
+        //     this.node.x += 4;
+        // } else if (this.speed.x > 0) {
+        //     this.speed.x = 0;
+        //     this.node.x -= 4;
+        // } else if (this.speed.y < 0) {
+        //     this.speed.y = 0;
+        //     this.node.y += 4;
+        // } else if (this.speed.y > 0) {
+        //     this.speed.y = 0;
+        //     this.node.y -= 4;
+        // }
 
 
     },
 
     onCollisionStay: function (other, self) {
-        // if (this.collisionY === -1) {
-        //     if (other.node.group === 'wall') {
-        //         var motion = other.node.getComponent('PlatformMotion');
-        //         if (motion) {
-        //             this.node.x += motion._movedDiff;
-        //         }
-        //     }
-
-        //     // this.node.y = other.world.aabb.yMax;
-
-        //     // var offset = cc.v2(other.world.aabb.x - other.world.preAabb.x, 0);
-
-        //     // var temp = cc.affineTransformClone(self.world.transform);
-        //     // temp.tx = temp.ty = 0;
-
-        //     // offset = cc.pointApplyAffineTransform(offset, temp);
-        //     // this.node.x += offset.x;
-        // }
     },
-    onCollisionExit: function (other) {
-        this.touchingNumber--;
-        if (this.touchingNumber === 0) {
-            this.node.color = cc.Color.WHITE;
-        }
-
-        if (other.touchingX) {
-            this.collisionX = 0;
-            other.touchingX = false;
-        }
-        else if (other.touchingY) {
-            other.touchingY = false;
-            this.collisionY = 0;
-        }
+    onCollisionExit: function (other) {        
     },
 
 
