@@ -1,9 +1,9 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "pacman-move",
+  "_name": "InkyRight",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.375,
+  "_duration": 0.25,
   "sample": 8,
   "speed": 1,
   "wrapMode": "2",
@@ -14,19 +14,13 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "f2a1e3c3-ca1f-48c4-8afe-e28f40cccbf1"
+              "__uuid__": "de25af27-e2eb-4b57-afaf-42254a8e767c"
             }
           },
           {
             "frame": 0.125,
             "value": {
-              "__uuid__": "59d1b26c-74c9-4eef-b984-9c449169162f"
-            }
-          },
-          {
-            "frame": 0.25,
-            "value": {
-              "__uuid__": "c2bb3827-2c6c-43a0-a3a6-aa29e23c62a3"
+              "__uuid__": "1e102cd9-f8a2-4c5b-9ec5-559550a0cc20"
             }
           }
         ]

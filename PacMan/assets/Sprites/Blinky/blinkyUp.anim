@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "blinky03",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.25,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "06c527f0-6462-41f6-952c-b29553c465f3"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "af57e47f-915d-4639-89d5-d8289bfff548"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

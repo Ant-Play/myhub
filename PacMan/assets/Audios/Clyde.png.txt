@@ -1,0 +1,1 @@
+Clyde_01.png.png 1 1, Clyde_02.png.png 17 1, Clyde_03.png.png 1 17, Clyde_04.png.png 17 17, Clyde_05.png.png 1 33, Clyde_06.png.png 17 33, Clyde_07.png.png 1 49, Clyde_08.png.png 17 49.

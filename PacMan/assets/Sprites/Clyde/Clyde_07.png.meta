@@ -1,0 +1,32 @@
+{
+  "ver": "2.3.0",
+  "uuid": "eb7912b7-87ba-41a3-ad1e-b2d1b7e1b252",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "platformSettings": {},
+  "subMetas": {
+    "Clyde_07": {
+      "ver": "1.0.3",
+      "uuid": "9b5a2cbf-efc5-428e-aeb7-e2a5cc8e53ec",
+      "rawTextureUuid": "eb7912b7-87ba-41a3-ad1e-b2d1b7e1b252",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 14,
+      "height": 14,
+      "rawWidth": 14,
+      "rawHeight": 14,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

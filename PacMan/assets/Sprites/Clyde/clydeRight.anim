@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "clydeRight",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.25,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "9ba7b484-4d7a-4b21-ac64-2cbceeb6f925"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "bb5027ca-fe15-4201-82fe-6799a4486bb6"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "PinkyRight",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.25,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": "2",
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "0b69c60d-89c5-4742-86bb-15c83f0c8379"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "bb9aa9bd-b1a0-44d8-9562-589368e62ffd"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
