@@ -19,6 +19,14 @@ cc.Class({
         pacMan: {
             default: null,
             type: cc.Node
+        },
+        scoreDisplay: {
+            default: null,
+            type: cc.Label
+        },
+        highestScoreDisplay: {
+            default: null,
+            type: cc.Label
         }
     },
 
@@ -26,19 +34,27 @@ cc.Class({
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
-        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
-        cc.PhysicsManager.DrawBits.e_pairBit |
-        cc.PhysicsManager.DrawBits.e_centerOfMassBit |
-        cc.PhysicsManager.DrawBits.e_jointBit |
-        cc.PhysicsManager.DrawBits.e_shapeBit
-        ;
+        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
+        // cc.PhysicsManager.DrawBits.e_pairBit |
+        // cc.PhysicsManager.DrawBits.e_centerOfMassBit |
+        // cc.PhysicsManager.DrawBits.e_jointBit |
+        // cc.PhysicsManager.DrawBits.e_shapeBit
+        // ;
 
         this.spawnNewBeanDot();
-
+        this.score = 0;
+        this.highestScore=JSON.parse(cc.sys.localStorage.getItem("highestScore"));
+        if(!this.highestScore){
+            this.highestScore={
+                highestScoreData:0
+            };
+            cc.sys.localStorage.setItem("highestScore",JSON.stringify(this.highestScore));
+        }
+        this.highestScoreDisplay.string="HighestScore："+this.highestScore.highestScoreData;
     },
 
     start () {
-
+        cc.director.pause();
     },
 
     // update (dt) {},
@@ -59,4 +75,33 @@ cc.Class({
  
         return cc.v2(randX, randY);
     },
+
+    gainScore: function () {
+        this.score += 1;
+        // 更新 scoreDisplay Label 的文字
+        this.scoreDisplay.string = 'Score: ' + this.score;
+        if(this.score>this.highestScore.highestScoreData){
+            this.highestScore.highestScoreData=this.score;
+            this.highestScoreDisplay.string="HighestScore："+this.highestScore.highestScoreData;
+            cc.sys.localStorage.setItem("highestScore",JSON.stringify(this.highestScore));
+        }
+    },
+
+
+    pauseGame:function(){
+        cc.director.pause();
+    },
+    resumeGame:function(){
+        cc.director.resume();
+    },
+    exitGame:function(){
+        //cc.director.end();
+        cc.game.end();
+    },
+    restartGame:function(){
+        //cc.director.loadScene(Main);
+        //var cur=cc.director.getScene();
+       cc.director.loadScene("Main");
+       cc.director.resume();
+    }
 });
