@@ -12,9 +12,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        eatBeanSm : {
-            default : null,
-            type : cc.AudioClip
+        eatSpecialBeanSm: {
+            default: null,
+            type: cc.AudioClip
         },
         pickRadius: 0,
     },
@@ -23,7 +23,7 @@ cc.Class({
 
     // onLoad () {},
 
-    start () {
+    start() {
 
     },
     getPlayerDistance: function () {
@@ -33,13 +33,27 @@ cc.Class({
         var dist = this.node.position.sub(playerPos).mag();
         return dist;
     },
-    onPicked: function() {
+    onPicked: function () {
         // 当星星被收集时，调用 Game 脚本中的接口，生成一个新的星星
         //this.game.spawnNewStar();
         this.game.gainScore(1);
         // 然后销毁当前星星节点
+        this.sc1 = this.game.blinky.getComponent("Blinky_Move");
+        //sc.Speed1();
+        this.sc1.getDebuff();
+        this.sc2 = this.game.pinky.getComponent("Pinky_Move");
+        this.sc2.getDebuff();
+
+        this.sc3 = this.game.clyde.getComponent("Clyde_Move");
+        this.sc3.getDebuff();
+
+        this.sc4 = this.game.Inky.getComponent("Inky_Move");
+        this.sc4.getDebuff();
+
+        //this.sc.Speed1;
+        //console.log(this.sc2);
         this.node.destroy();
-        this.eatSm = cc.audioEngine.play(this.eatBeanSm,false,1);
+        this.eatSpecialSm = cc.audioEngine.play(this.eatSpecialBeanSm, false, 1);
     },
 
     update: function (dt) {
