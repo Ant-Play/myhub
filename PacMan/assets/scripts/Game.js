@@ -12,6 +12,30 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        firstKillSm : {
+            default : null,
+            type : cc.AudioClip
+        },
+        doubleKillSm : {
+            default : null,
+            type : cc.AudioClip
+        },
+        killingSpreeSm : {
+            default : null,
+            type : cc.AudioClip
+        },
+        dominatingSm : {
+            default : null,
+            type : cc.AudioClip
+        },
+        megaKillSm : {
+            default : null,
+            type : cc.AudioClip
+        },
+        victorySm : {
+            default : null,
+            type : cc.AudioClip
+        },
         beanDotPrefab: {
             default: null,
             type: cc.Prefab
@@ -571,7 +595,7 @@ cc.Class({
         }
         this.remainingBeanDot += this.array1.length;
         this.score = 0;
-        //this.highestScore = JSON.parse(cc.sys.localStorage.getItem("highestScore"));
+        this.highestScore = JSON.parse(cc.sys.localStorage.getItem("highestScore"));
         if (!this.highestScore) {
             this.highestScore = {
                 highestScoreData: 0
@@ -621,20 +645,27 @@ cc.Class({
         if (value == 1) {//游戏胜利
             this.remainingBeanDot--;
             if (this.remainingBeanDot == 0) {
-
+                this.winSm = cc.audioEngine.play(this.victorySm,false,0.5);
+                cc.director.pause();
+                setTimeout("cc.director.loadScene('Win');", 500);
             }
         } else {
             this.kills++;
             switch (this.kills) {//播放杀敌音效
                 case 1:
+                    this.firstSm = cc.audioEngine.play(this.firstKillSm,false,1);
                     break;
                 case 2:
+                    this.doubleSm = cc.audioEngine.play(this.doubleKillSm,false,1);
                     break;
                 case 3:
+                    this.tribleSm = cc.audioEngine.play(this.killingSpreeSm,false,1);
                     break;
                 case 4:
+                    this.quadrupleSm = cc.audioEngine.play(this.dominatingSm,false,1);
                     break;
                 default:
+                    this.pentupleSm = cc.audioEngine.play(this.megaKillSm,false,1);
                     this.kills--;
                     break;
             }
