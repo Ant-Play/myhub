@@ -8,6 +8,43 @@ cc.Class({
         moveSpeed: 0,
         dir: cc.v2(0, 0),
         size:cc.v2(7, 7),
+        lives:1,//生命
+        gameOverSm: {
+            default: null,
+            type: cc.AudioClip
+        },
+        pinky: {
+            default: null,
+            type: cc.Node
+        },
+        inky: {
+            default: null,
+            type: cc.Node
+        },
+        blinky: {
+            default: null,
+            type: cc.Node
+        },
+        clyde: {
+            default: null,
+            type: cc.Node
+        },
+        livesDisplay: {
+            default: null,
+            type: cc.Label
+        },
+        deathSoundEffect: {
+            type: cc.AudioClip,
+            default: null
+        },
+        getLivesSoundEffect: {
+            type: cc.AudioClip,
+            default: null
+        },
+        SoundEffect: {
+            default: null,
+            type: cc.Node
+        },
     },
 
     onLoad: function () {
@@ -23,10 +60,13 @@ cc.Class({
     },
     start() {
         this.status = 0;
+        this.egg_count=0;
         // this.size.x=this.node.width*0.3;
         // this.size.y=this.node.height*0.3;
         this.detectionDistance=16;
- 
+        this.flagOfAddlives=1;//允许添加生命的flag
+        this.flagOfReset=0;
+        this.livesDisplay.string = 'Lives: ' + this.lives;
     },
     onEnable: function () {
         // cc.director.getCollisionManager().enabled = true;
@@ -182,26 +222,62 @@ cc.Class({
         this.node.x += this.speed.x;
         this.node.y += this.speed.y;
 
+        //判断位置，获得彩蛋
+        if(this.flagOfAddlives==1){
+            this.check_location();
+            if(this.egg_count >= 180){
+                //触发彩蛋
+                 //console.log("true !!! ");
+                 cc.audioEngine.play(this.getLivesSoundEffect, false, 1);
+                     this.lives=3;
+                     this.livesDisplay.string = 'Lives: ' + this.lives;
+                     this.flagOfAddlives=0;
+            }
+        }
+        
+        if(this.flagOfReset==1){
+            this.node.x=-81;
+            this.node.y=-245;
+            this.speed.x=0;
+            this.speed.y=0;
+            this.flagOfReset=0;
+        }
+        
     },
-
+    decease:function () {
+        var pinkyReset=this.pinky.getComponent("Pinky_Move");
+        var inkyReset=this.inky.getComponent("Inky_Move");
+        var clydeReset=this.clyde.getComponent("Clyde_Move");
+        var blinkyReset=this.blinky.getComponent("Blinky_Move");
+        pinkyReset.reset();
+        inkyReset.reset();
+        clydeReset.reset();
+        blinkyReset.reset();
+        var stopBgm= this.SoundEffect.getComponent(cc.AudioSource);
+        stopBgm.pause();
+        if(this.lives<=1){
+            setTimeout("cc.director.loadScene('Gameover');", 1000);
+            this.overSm = cc.audioEngine.play(this.gameOverSm, false, 1);
+        }else{
+            cc.audioEngine.play(this.deathSoundEffect, false, 1);
+            this.lives--;
+            this.livesDisplay.string = 'Lives: ' + this.lives;
+            this.flagOfReset=1;
+            //cc.director.pause();
+            
+        }
+    },
+    check_location(){
+        if(this.node.x >= -125 && this.node.x <= -34 && this.node.y >= -22 && this.node.y <= 16)
+        {
+            this.egg_count += 1;
+        }
+        else{
+            this.egg_count = 0;
+        }
+    },
     onCollisionEnter: function (other, self) {
-        // if (this.speed.x < 0) {
-        //     this.speed.x = 0;
-        //     this.node.x += 4;
-        // } else if (this.speed.x > 0) {
-        //     this.speed.x = 0;
-        //     this.node.x -= 4;
-        // } else if (this.speed.y < 0) {
-        //     this.speed.y = 0;
-        //     this.node.y += 4;
-        // } else if (this.speed.y > 0) {
-        //     this.speed.y = 0;
-        //     this.node.y -= 4;
-        // }
-
-
     },
-
     onCollisionStay: function (other, self) {
     },
     onCollisionExit: function (other) {        

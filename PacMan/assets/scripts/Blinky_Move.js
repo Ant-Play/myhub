@@ -14,6 +14,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        pacMan: {
+            default: null,
+            type: cc.Node
+        },
         speed: cc.v2(0, 0),
         dir: cc.v2(0, 0),
         location: cc.v2(0, 0),
@@ -33,6 +37,7 @@ cc.Class({
         this.accUp = true;
         this.status = 0;
         this.deathFlag = false;
+        this.flagOfReset=0;
     },
     start() {
 
@@ -54,12 +59,16 @@ cc.Class({
         // if(this.accUp){
         //     cc.director.pause();
         // }
+       
         if (this.deathFlag == true) {
             cc.audioEngine.play(this.deathAudio, false, 0.5);
-            this.node.x = 0;
-            this.node.y = 0;
             this.deathFlag = false;
             this.canvas.getComponent("Game").gainScore(100);
+        }
+        if(this.flagOfReset==1){
+            this.node.x = 0;
+            this.node.y = 0;
+            this.flagOfReset=0;
         }
         this.Move();
 
@@ -135,19 +144,24 @@ cc.Class({
     onBeginContact: function (contact, selfCollider, otherCollider) {
         // console.log(otherCollider.node.group);
         if (otherCollider.node.group == "pacman") {
+            this.reset();
             if (this.moveSpeed != this.debuffSpeed) {
                 cc.director.pause();
-                setTimeout("cc.director.loadScene('Gameover');", 1000);
-                this.overSm = cc.audioEngine.play(this.gameOverSm, false, 1);
+                var death=this.pacMan.getComponent("Player");
+                death.decease();
+                //setTimeout("cc.director.loadScene('Gameover');", 1000);
+                //this.overSm = cc.audioEngine.play(this.gameOverSm, false, 1);
                 //cc.director.loadScene("Gameover");
             } else {
                 this.deathFlag = true;
             }
-
         }
         // else if(otherCollider.node.group == "ghost"){
         //     this.Move();
         // }
+    },
+    reset:function(){
+        this.flagOfReset=1;
     },
     onEndContact: function (contact, selfCollider, otherCollider) {
 
