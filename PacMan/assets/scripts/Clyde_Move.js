@@ -1,4 +1,4 @@
-cc.Class({
+cc.Class({//注释看Blinky_Move.js
     extends: cc.Component,
 
     properties: {
@@ -21,7 +21,6 @@ cc.Class({
         speed: cc.v2(0, 0),
         dir: cc.v2(0, 0),
         location: cc.v2(0, 0),
-        size: cc.v2(7, 7),
         moveSpeed: 1,
         debuffSpeed: 0.5,
         status: 0,
@@ -35,7 +34,7 @@ cc.Class({
         this.accUp = true;
         this.status = 0;
         this.deathFlag = false;
-        this.flagOfReset=0;
+        this.flagOfReset = 0;
     },
     start() {
 
@@ -49,18 +48,10 @@ cc.Class({
             this.location.x = this.node.x;
             this.location.y = this.node.y;
         }
-        // if(this.cnt == 5){
-        //     this.cnt = 0;
-        //     console.log(parseInt(this.node.x),parseInt(this.node.y));
-        // }
-        // this.accRight = true;
-        // if(this.accUp){
-        //     cc.director.pause();
-        // }
-        if(this.flagOfReset==1){
+        if (this.flagOfReset == 1) {
             this.node.x = 0;
             this.node.y = 0;
-            this.flagOfReset=0;
+            this.flagOfReset = 0;
         }
         if (this.deathFlag == true) {
             cc.audioEngine.play(this.deathAudio, false, 0.5);
@@ -71,21 +62,15 @@ cc.Class({
 
         this.cnt += 1;
         this.status = 0;
-        // console.log();
     },
-    /*getDebuff: function(){
-        //this.mmoveSpeed = this.node.properties.moveSpeed;
-        this.moveSpeed = 0.2;
-    },*/
 
     getDebuff: function () {
-        //this.mmoveSpeed = this.node.properties.moveSpeed;
         this.moveSpeed = this.debuffSpeed;
         var action = cc.fadeTo(0, 100);
         this.node.runAction(action);
 
         this.unschedule(this.debuffDuration);
-        this.scheduleOnce(this.debuffDuration=function () {
+        this.scheduleOnce(this.debuffDuration = function () {
             this.recover();
         }.bind(this), 5)
     },
@@ -133,8 +118,6 @@ cc.Class({
         } else if (this.num == 3) {
             this.accUp = true;
         }
-
-        // console.log(this.num);
     },
     Init() {
         this.accLeft = false;
@@ -147,51 +130,18 @@ cc.Class({
         if (otherCollider.node.group == "pacman") {
             this.reset();
             if (this.moveSpeed != this.debuffSpeed) {
-                cc.director.pause();
-                var death=this.pacMan.getComponent("Player");
+                var death = this.pacMan.getComponent("Player");
                 death.decease();
-                //setTimeout("cc.director.loadScene('Gameover');", 1000);
-                //this.overSm = cc.audioEngine.play(this.gameOverSm, false, 1);
-                //cc.director.loadScene("Gameover");
             } else {
                 this.deathFlag = true;
             }
         }
     },
-    reset:function(){
-        this.flagOfReset=1;
+    reset: function () {
+        this.flagOfReset = 1;
     },
     onEndContact: function (contact, selfCollider, otherCollider) {
-
     },
     onPreSolve: function (contact, selfCollider, otherCollider) {
-
     },
-    Valid() {
-        this.isWallTop = false;
-        this.isWallButton = false;
-        this.PW1 = this.node.convertToWorldSpaceAR(cc.v2(0, 0));
-        this.PwTemp = cc.v2(this.PW1);
-        this.PwTemp.x += this.dir.y * this.size.x;
-        this.PwTemp.y += this.dir.x * this.size.y;
-        this.PW2 = cc.v2(0, 0);
-        this.PW2.x = this.PwTemp.x + this.dir.x * this.moveSpeed * this.detectionDistance;
-        this.PW2.y = this.PwTemp.y + this.dir.y * this.moveSpeed * this.detectionDistance;
-        this.results = cc.director.getPhysicsManager().rayCast(this.PwTemp, this.PW2, cc.RayCastType.Closest);
-        if (this.results.length >= 1) {
-            this.results[0].collider.node.name == "Maze" ? this.isWallTop = true : this.isWallTop = false;
-        }
-        this.PwTemp = cc.v2(this.PW1);
-        this.PwTemp.x -= this.dir.y * this.size.x;
-        this.PwTemp.y -= this.dir.x * this.size.y;
-        this.PW2 = cc.v2(0, 0);
-        this.PW2.x = this.PwTemp.x + this.dir.x * this.moveSpeed * this.detectionDistance;
-        this.PW2.y = this.PwTemp.y + this.dir.y * this.moveSpeed * this.detectionDistance;
-        this.results = cc.director.getPhysicsManager().rayCast(this.PwTemp, this.PW2, cc.RayCastType.Closest);
-        if (this.results.length >= 1) {
-            this.results[0].collider.node.name == "Maze" ? this.isWallButton = true : this.isWallButton = false;
-        }
-        return (this.isWallTop == false) && (this.isWallButton == false);
-    },
-
 });
