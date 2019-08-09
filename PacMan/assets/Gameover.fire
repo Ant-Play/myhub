@@ -47,9 +47,9 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.5687630335489909,
-      "y": 0.5687630335489909,
-      "z": 0.5687630335489909
+      "x": 1,
+      "y": 1,
+      "z": 1
     },
     "_quat": {
       "__type__": "cc.Quat",
@@ -389,7 +389,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 295,
+      "x": 294,
       "y": 174,
       "z": 0
     },
@@ -413,7 +413,7 @@
     "groupIndex": 0,
     "_rotationX": 0,
     "_rotationY": 0,
-    "_id": "a22lfdTPRFzLAz/8JSZui0"
+    "_id": "desJTwUpRLz497QVKnUoA/"
   },
   {
     "__type__": "cc.Node",
@@ -424,7 +424,7 @@
     },
     "_children": [],
     "_active": true,
-    "_level": 0,
+    "_level": 2,
     "_components": [
       {
         "__id__": 11
@@ -528,7 +528,7 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
-    "_id": "b7TIg7bpxPYpnu2UyKDPjg"
+    "_id": "57Nm2P7IhNGIR4VI5V1hzl"
   },
   {
     "__type__": "cc.Button",
@@ -612,7 +612,7 @@
     "_N$target": {
       "__id__": 9
     },
-    "_id": "5eQYg2uXhGMLea/e2Ym1bT"
+    "_id": "6bdhHEv6tH3Lj+eacdAA1p"
   },
   {
     "__type__": "cc.ClickEvent",
@@ -667,8 +667,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 690,
-      "y": 178,
+      "x": 684,
+      "y": 174,
       "z": 0
     },
     "_scale": {
@@ -691,7 +691,7 @@
     "groupIndex": 0,
     "_rotationX": 0,
     "_rotationY": 0,
-    "_id": "944oH5YiJJo5T9LjKBVxzc"
+    "_id": "62vsjT3oFOFJ9FBVk7a/45"
   },
   {
     "__type__": "cc.Node",
@@ -702,7 +702,7 @@
     },
     "_children": [],
     "_active": true,
-    "_level": 0,
+    "_level": 2,
     "_components": [
       {
         "__id__": 17
@@ -806,7 +806,7 @@
     "_isTrimmedMode": true,
     "_state": 0,
     "_atlas": null,
-    "_id": "e6lIU6OntOX7kXub78FVkJ"
+    "_id": "82ypwKvXpIbZZnrJYzx4EE"
   },
   {
     "__type__": "cc.Button",
@@ -890,7 +890,7 @@
     "_N$target": {
       "__id__": 15
     },
-    "_id": "b1DheeqoROhLUYZMs9lC+Y"
+    "_id": "5bUoNyliVMb4281HWPiZUn"
   },
   {
     "__type__": "cc.ClickEvent",
@@ -900,6 +900,6 @@
     "component": "",
     "_componentId": "2b06dU8hIhP3KSXD3KBvMEl",
     "handler": "exitGame",
-    "customEventData": ""
+    "customEventData": "0"
   }
 ]
