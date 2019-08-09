@@ -2,26 +2,25 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        gameOverSm: {
+        deathAudio: {//被吃掉音效
             default: null,
             type: cc.AudioClip
         },
-        deathAudio: {
-            default: null,
-            type: cc.AudioClip
-        },
-        canvas: {
+        canvas: {//幕布
             default: null,
             type: cc.Node
         },
-        speed: cc.v2(0, 0),
-        dir: cc.v2(0, 0),
-        location: cc.v2(0, 0),
-        size: cc.v2(7, 7),
-        moveSpeed: 1,
-        debuffSpeed: 0.5,
-        status: 0,
-        cnt: 0,
+        pacMan: {
+            default: null,
+            type: cc.Node
+        },
+        speed: cc.v2(0, 0),//移动速度
+        dir: cc.v2(0, 0),//方向
+        location: cc.v2(0, 0),//上一帧的位置，用于判断是否停止移动
+        moveSpeed: 1,//移动速率
+        debuffSpeed: 0.5,//获得减益效果
+        status: 0,//是否改变了方向
+        cnt: 0,//计算帧数，两个帧数判断一次是否停止
     },
 
 
@@ -30,15 +29,16 @@ cc.Class({
         this.Init();
         this.location.x = this.node.x;
         this.location.y = this.node.y;
-        this.accUp = true;
+        this.accUp = true;//初始方向
         this.status = 0;
-        this.deathFlag = false;
+        this.deathFlag = false;//死亡标记
+        this.flagOfReset = 0;//归位标记
     },
     start() {
 
     },
     update: function (dt) {
-        if (this.cnt == 2) {
+        if (this.cnt == 2) {//如果停止则改变方向
             if (this.node.x == this.location.x && this.node.y == this.location.y) {
                 this.Change_way();
             }
@@ -46,47 +46,41 @@ cc.Class({
             this.location.x = this.node.x;
             this.location.y = this.node.y;
         }
-        // if(this.cnt == 5){
-        //     this.cnt = 0;
-        //     console.log(parseInt(this.node.x),parseInt(this.node.y));
-        // }
-        // this.accRight = true;
-        // if(this.accUp){
-        //     cc.director.pause();
-        // }
-        if (this.deathFlag == true) {
+
+        if (this.deathFlag == true) {//被吃掉时触发的事件
             cc.audioEngine.play(this.deathAudio, false, 0.5);
-            this.node.x = 0;
-            this.node.y = 0;
             this.deathFlag = false;
             this.canvas.getComponent("Game").gainScore(100);
         }
-        this.Move();
+        if (this.flagOfReset == 1) {//归位
+            this.node.x = 0;
+            this.node.y = 0;
+            this.flagOfReset = 0;
+        }
+        this.Move();//移动
 
         this.cnt += 1;
         this.status = 0;
-        // console.log();
     },
 
-    getDebuff: function () {
-        //this.moveSpeed = this.node.properties.moveSpeed;
-        this.moveSpeed = this.debuffSpeed;
-        var action = cc.fadeTo(0, 100);
+    getDebuff: function () {//减益效果
+        this.moveSpeed = this.debuffSpeed;//减速
+        var action = cc.fadeTo(0, 100);//改透明度
         this.node.runAction(action);
 
-        this.unschedule(this.debuffDuration);
-        this.scheduleOnce(this.debuffDuration=function () {
+        this.unschedule(this.debuffDuration);//如果再次获得减益效果，则重置持续时间
+        this.scheduleOnce(this.debuffDuration = function () {//五秒后恢复正常
             this.recover();
         }.bind(this), 5)
     },
 
-    recover: function () {
+    recover: function () {//恢复，即移除减益效果
         this.moveSpeed = 1;
         var action1 = cc.fadeIn(0);
         this.node.runAction(action1);
     },
 
-    Move() {
+    Move() {//移动及变换方向
         var anim = this.node.getComponent(cc.Animation);
         if (this.accLeft) {
             this.dir.x = -1;
@@ -110,7 +104,7 @@ cc.Class({
         this.node.x += this.speed.x;
         this.node.y += this.speed.y;
     },
-    Change_way() {
+    Change_way() {//随机改变方向
         this.status = 1;
         this.num = parseInt(Math.random() * 100000 % 4);
         this.Init();
@@ -132,54 +126,22 @@ cc.Class({
         this.accDown = false;
         this.accUp = false;
     },
-    onBeginContact: function (contact, selfCollider, otherCollider) {
-        // console.log(otherCollider.node.group);
+    onBeginContact: function (contact, selfCollider, otherCollider) {//与pacman碰撞时发生的事件
         if (otherCollider.node.group == "pacman") {
-            if (this.moveSpeed != this.debuffSpeed) {
-                cc.director.pause();
-                setTimeout("cc.director.loadScene('Gameover');", 1000);
-                this.overSm = cc.audioEngine.play(this.gameOverSm, false, 1);
-                //cc.director.loadScene("Gameover");
-            } else {
+            this.reset();
+            if (this.moveSpeed != this.debuffSpeed) {//如果不是DeBuff状态，致死
+                var death = this.pacMan.getComponent("Player");
+                death.decease();
+            } else {//是DeBuff状态，自己死
                 this.deathFlag = true;
             }
-
         }
-        // else if(otherCollider.node.group == "ghost"){
-        //     this.Move();
-        // }
+    },
+    reset: function () {//归位标记
+        this.flagOfReset = 1;
     },
     onEndContact: function (contact, selfCollider, otherCollider) {
-
     },
     onPreSolve: function (contact, selfCollider, otherCollider) {
-
     },
-    Valid() {
-        this.isWallTop = false;
-        this.isWallButton = false;
-        this.PW1 = this.node.convertToWorldSpaceAR(cc.v2(0, 0));
-        this.PwTemp = cc.v2(this.PW1);
-        this.PwTemp.x += this.dir.y * this.size.x;
-        this.PwTemp.y += this.dir.x * this.size.y;
-        this.PW2 = cc.v2(0, 0);
-        this.PW2.x = this.PwTemp.x + this.dir.x * this.moveSpeed * this.detectionDistance;
-        this.PW2.y = this.PwTemp.y + this.dir.y * this.moveSpeed * this.detectionDistance;
-        this.results = cc.director.getPhysicsManager().rayCast(this.PwTemp, this.PW2, cc.RayCastType.Closest);
-        if (this.results.length >= 1) {
-            this.results[0].collider.node.name == "Maze" ? this.isWallTop = true : this.isWallTop = false;
-        }
-        this.PwTemp = cc.v2(this.PW1);
-        this.PwTemp.x -= this.dir.y * this.size.x;
-        this.PwTemp.y -= this.dir.x * this.size.y;
-        this.PW2 = cc.v2(0, 0);
-        this.PW2.x = this.PwTemp.x + this.dir.x * this.moveSpeed * this.detectionDistance;
-        this.PW2.y = this.PwTemp.y + this.dir.y * this.moveSpeed * this.detectionDistance;
-        this.results = cc.director.getPhysicsManager().rayCast(this.PwTemp, this.PW2, cc.RayCastType.Closest);
-        if (this.results.length >= 1) {
-            this.results[0].collider.node.name == "Maze" ? this.isWallButton = true : this.isWallButton = false;
-        }
-        return (this.isWallTop == false) && (this.isWallButton == false);
-    },
-
 });

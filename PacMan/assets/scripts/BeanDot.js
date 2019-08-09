@@ -1,29 +1,17 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        eatBeanSm : {
-            default : null,
-            type : cc.AudioClip
+        eatBeanSm: {
+            default: null,
+            type: cc.AudioClip
         },
         pickRadius: 0,
     },
 
-    // LIFE-CYCLE CALLBACKS:
-
     // onLoad () {},
 
-    start () {
+    start() {
 
     },
     getPlayerDistance: function () {
@@ -33,13 +21,12 @@ cc.Class({
         var dist = this.node.position.sub(playerPos).mag();
         return dist;
     },
-    onPicked: function() {
-        // 当星星被收集时，调用 Game 脚本中的接口，生成一个新的星星
-        //this.game.spawnNewStar();
+    onPicked: function () {
+        // 得分加1
         this.game.gainScore(1);
-        // 然后销毁当前星星节点
+        // 然后销毁当前豆点节点
         this.node.destroy();
-        this.eatSm = cc.audioEngine.play(this.eatBeanSm,false,1);
+        this.eatSm = cc.audioEngine.play(this.eatBeanSm, false, 1);
     },
 
     update: function (dt) {

@@ -1,14 +1,4 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
-cc.Class({
+cc.Class({//这里挂了BGM和按键音效
     extends: cc.Component,
 
     properties: {
@@ -19,12 +9,10 @@ cc.Class({
     },
 
     playButtonSoundEffect: function () {
-        //this.buttonSoundEffect.play();
         this.current = cc.audioEngine.play(this.buttonSoundEffect, false, 1);
     },
 
     pauseButtonSoundEffect: function () {
-        //this.buttonSoundEffect.pause();
         cc.audioEngine.stop(this.current);
     },
 });

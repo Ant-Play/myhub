@@ -10,33 +10,28 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    onLoad() {
         cc.director.getPhysicsManager().enabled = true;
-        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
-        // cc.PhysicsManager.DrawBits.e_pairBit |
-        // cc.PhysicsManager.DrawBits.e_centerOfMassBit |
-        // cc.PhysicsManager.DrawBits.e_jointBit |
-        // cc.PhysicsManager.DrawBits.e_shapeBit
         ;
     },
 
-    start () {
+    start() {
         cc.director.pause();
     },
-    pauseGame:function(){
+    pauseGame: function () {
         cc.director.pause();
     },
-    resumeGame:function(){
+    resumeGame: function () {
         cc.director.resume();
     },
-    exitGame:function(){
+    exitGame: function () {
         cc.game.end();
     },
-    restartGame:function(){
-       cc.director.resume();
-       cc.director.once(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
+    restartGame: function () {
         cc.director.resume();
-    });
-       cc.director.loadScene("Main");
+        cc.director.once(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
+            cc.director.resume();
+        });
+        cc.director.loadScene("Main");
     }
 });

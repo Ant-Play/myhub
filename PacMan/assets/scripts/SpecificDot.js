@@ -1,18 +1,8 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        eatSpecialBeanSm: {
+        eatSpecialBeanSm: {//被吃的音效
             default: null,
             type: cc.AudioClip
         },
@@ -34,12 +24,11 @@ cc.Class({
         return dist;
     },
     onPicked: function () {
-        // 当星星被收集时，调用 Game 脚本中的接口，生成一个新的星星
-        //this.game.spawnNewStar();
+        // 当特殊豆点被收集时，调用 Game 脚本中的接口，得分加1
         this.game.gainScore(1);
-        // 然后销毁当前星星节点
+        // 所有幽灵获得DeBuff
         this.sc1 = this.game.blinky.getComponent("Blinky_Move");
-        //sc.Speed1();
+
         this.sc1.getDebuff();
         this.sc2 = this.game.pinky.getComponent("Pinky_Move");
         this.sc2.getDebuff();
@@ -50,8 +39,6 @@ cc.Class({
         this.sc4 = this.game.Inky.getComponent("Inky_Move");
         this.sc4.getDebuff();
 
-        //this.sc.Speed1;
-        //console.log(this.sc2);
         this.node.destroy();
         this.eatSpecialSm = cc.audioEngine.play(this.eatSpecialBeanSm, false, 1);
     },

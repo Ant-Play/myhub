@@ -1,22 +1,36 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        beanDotPrefab: {
+        firstKillSm: {//各种音效
+            default: null,
+            type: cc.AudioClip
+        },
+        doubleKillSm: {
+            default: null,
+            type: cc.AudioClip
+        },
+        killingSpreeSm: {
+            default: null,
+            type: cc.AudioClip
+        },
+        dominatingSm: {
+            default: null,
+            type: cc.AudioClip
+        },
+        megaKillSm: {
+            default: null,
+            type: cc.AudioClip
+        },
+        victorySm: {
+            default: null,
+            type: cc.AudioClip
+        },
+        beanDotPrefab: {//豆点预制体
             default: null,
             type: cc.Prefab
         },
-        specificBeanDotPrefab: {
+        specificBeanDotPrefab: {//特殊豆点
             default: null,
             type: cc.Prefab
         },
@@ -32,7 +46,7 @@ cc.Class({
             default: null,
             type: cc.Label
         },
-        blinky: {
+        blinky: {//幽灵
             default: null,
             type: cc.Node
         },
@@ -48,7 +62,7 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        prefab: {
+        prefab: {//预制体节点，放置预制体以确保在幽灵前生成
             default: null,
             type: cc.Node
         },
@@ -59,12 +73,13 @@ cc.Class({
     onLoad() {
         cc.director.getPhysicsManager().enabled = true;
         // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_aabbBit |
-        //     cc.PhysicsManager.DrawBits.e_pairBit |
-        //     cc.PhysicsManager.DrawBits.e_centerOfMassBit |
-        //     cc.PhysicsManager.DrawBits.e_jointBit |
-        //     cc.PhysicsManager.DrawBits.e_shapeBit
-        //     ;
-        //加载豆点预制体
+        // cc.PhysicsManager.DrawBits.e_pairBit |
+        // cc.PhysicsManager.DrawBits.e_centerOfMassBit |
+        // cc.PhysicsManager.DrawBits.e_jointBit |
+        // cc.PhysicsManager.DrawBits.e_shapeBit
+
+
+        //加载豆点预制体，坐标通过算法生成，条件由队友确定
         this.array = [[-280, -234],
         [-280, -223],
         [-280, -212],
@@ -304,6 +319,7 @@ cc.Class({
         [-60, -135],
         [-60, -124],
         [-60, -113],
+        [116, -146],
         [116, -135],
         [116, -124],
         [116, -113],
@@ -458,7 +474,6 @@ cc.Class({
         [-280, 107],
         [-280, 118],
         [-280, 129],
-        [-280, 140],
         [-280, 151],
         [-280, 162],
         [-280, 173],
@@ -555,11 +570,12 @@ cc.Class({
         [116, 184],
         [116, 195]
         ];
+
         for (var i = 0; i < this.array.length; i++) {
             this.spawnNewBeanDot(cc.v2(this.array[i][0], this.array[i][1]));
         }
-        this.remainingBeanDot = this.array.length;
-        this.array1 = [[-280, -245],
+        this.remainingBeanDot = this.array.length;//计算剩余豆点
+        this.array1 = [[-280, -245],//特殊豆点
         [116, -245],
         [-280, 206],
         [116, 206]
@@ -567,33 +583,34 @@ cc.Class({
 
         for (var j = 0; j < this.array1.length; j++) {
             this.spawnNewBeanDot1(cc.v2(this.array1[j][0], this.array1[j][1]));
-            //console.log(cc.v2(this.array1[j][0], this.array1[j][1]));
         }
-        this.remainingBeanDot += this.array1.length;
-        this.score = 0;
-        //this.highestScore = JSON.parse(cc.sys.localStorage.getItem("highestScore"));
-        if (!this.highestScore) {
+        this.remainingBeanDot += this.array1.length;//加上特殊豆点的数量
+
+        this.score = 0;//分数
+        //读取本地存储的最高分
+        this.highestScore = JSON.parse(cc.sys.localStorage.getItem("highestScore"));
+        if (!this.highestScore) {//没有记录，初始化为0
             this.highestScore = {
                 highestScoreData: 0
             };
             cc.sys.localStorage.setItem("highestScore", JSON.stringify(this.highestScore));
         }
         this.highestScoreDisplay.string = "HighestScore：" + this.highestScore.highestScoreData;
-        this.kills = 0
+
+        this.kills = 0;//记录吃掉幽灵的次数
     },
 
     start() {
-        cc.director.pause();
+        cc.director.pause();//没有做过渡场景，直接暂停
     },
 
     // update (dt) {},
     spawnNewBeanDot: function (beanDotPosition) {
         // 使用给定的模板在场景中生成一个新节点
         var newBeanDot = cc.instantiate(this.beanDotPrefab);
-        // 将新增的节点添加到 Canvas 节点下面
-        //this.node.addChild(newBeanDot);
+        // 将新增的节点添加到 prefab 节点下面
         this.prefab.addChild(newBeanDot);
-        // 为豆点设置一个随机位置
+        // 为豆点设置一个位置
         newBeanDot.setPosition(beanDotPosition);//this.getNewBeanDotPosition()
         // 在豆点组件上暂存 Game 对象的引用
         newBeanDot.getComponent('BeanDot').game = this;
@@ -601,47 +618,51 @@ cc.Class({
     spawnNewBeanDot1: function (specificbeanDotPosition) {
         // 使用给定的模板在场景中生成一个新节点
         var newBeanDot1 = cc.instantiate(this.specificBeanDotPrefab);
-        // 将新增的节点添加到 Canvas 节点下面
+        // 将新增的节点添加到 prefab 节点下面
         this.prefab.addChild(newBeanDot1);
-        // 为豆点设置一个随机位置
+        // 为特殊豆点设置一个位置
         newBeanDot1.setPosition(specificbeanDotPosition);//this.getNewBeanDotPosition()
-        // 在豆点组件上暂存 Game 对象的引用
+        // 在特殊豆点组件上暂存 Game 对象的引用
         newBeanDot1.getComponent('SpecificDot').game = this;
     },
     gainScore: function (value) {
         this.score += value;
-        //   console.log(this.score)
         // 更新 scoreDisplay Label 的文字
         this.scoreDisplay.string = 'Score: ' + this.score;
-        if (this.score > this.highestScore.highestScoreData) {
+        if (this.score > this.highestScore.highestScoreData) {//如果超过最高分，则一起更新
             this.highestScore.highestScoreData = this.score;
             this.highestScoreDisplay.string = "HighestScore：" + this.highestScore.highestScoreData;
             cc.sys.localStorage.setItem("highestScore", JSON.stringify(this.highestScore));
         }
-        if (value == 1) {//游戏胜利
+        if (value == 1) {
             this.remainingBeanDot--;
-            if (this.remainingBeanDot == 0) {
-
+            if (this.remainingBeanDot == 0) {//游戏胜利
+                this.winSm = cc.audioEngine.play(this.victorySm, false, 0.5);
+                cc.director.pause();
+                setTimeout("cc.director.loadScene('Win');", 500);
             }
-        } else {
+        } else {//吃掉幽灵
             this.kills++;
             switch (this.kills) {//播放杀敌音效
                 case 1:
+                    this.firstSm = cc.audioEngine.play(this.firstKillSm, false, 1);
                     break;
                 case 2:
+                    this.doubleSm = cc.audioEngine.play(this.doubleKillSm, false, 1);
                     break;
                 case 3:
+                    this.tribleSm = cc.audioEngine.play(this.killingSpreeSm, false, 1);
                     break;
                 case 4:
+                    this.quadrupleSm = cc.audioEngine.play(this.dominatingSm, false, 1);
                     break;
                 default:
+                    this.pentupleSm = cc.audioEngine.play(this.megaKillSm, false, 1);
                     this.kills--;
                     break;
             }
         }
     },
-
-
     pauseGame: function () {
         cc.director.pause();
     },
@@ -649,13 +670,9 @@ cc.Class({
         cc.director.resume();
     },
     exitGame: function () {
-        //cc.director.end();
         cc.game.end();
     },
     restartGame: function () {
-        //cc.director.loadScene(Main);
-        //var cur=cc.director.getScene();
         cc.director.loadScene("Main");
-        //cc.director.resume();
     }
 });
